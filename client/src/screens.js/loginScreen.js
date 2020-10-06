@@ -177,6 +177,9 @@ class LoginScreen extends Component {
             }}
             source={require('../assets/authbg.png')}
           />
+          <Animated.Text style={{fontSize: 35, color: "white", position: "absolute",
+           left:20, top: 100, zIndex:99999, transform: [{translateY: this.bgTransformY}],}}>
+           RAKBANK</Animated.Text>
         </View>
         <View style={{flex: 1, justifyContent: 'center'}}>
           <Animated.View
