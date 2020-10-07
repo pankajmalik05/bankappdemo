@@ -15,7 +15,6 @@ Router.post("/signup", (req, res) => {
 
 Router.post("/login", (req, res) => {
   const { user } = req.body;
-  console.log("TEST 01, logging");
   MyUserController.authenticateUser(user)
     .then((aUser) => {
       return res

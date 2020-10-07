@@ -1,16 +1,13 @@
 import React, {Component} from 'react';
 import {
   View,
-  Text,
   ScrollView,
   TouchableOpacity,
   RefreshControl,
+  StyleSheet,
 } from 'react-native';
-
 import CustomFooter from '../components/customFooter';
-import CustomHeader from '../components/customHeader';
 import InfoBox from '../components/infoBox';
-import TransButton from '../components/transButton';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {logout, updateUserInfo} from '../store/actions/authActions';
 import {connect} from 'react-redux';
@@ -27,28 +24,21 @@ class HomeScreen extends Component {
     this.setState({loading: true});
     updateUserInfo()
       .then((updated) => {
-        console.log('TEST 5info taken and updated');
         this.setState({loading: false});
       })
       .catch((Err) => {
-        console.log('Error in updating user info');
-        console.log(Err);
         this.setState({loading: false});
-        //   reject('Device info not updated');
       });
   };
 
   render() {
     const {currentUser} = this.props;
     return (
-      <View style={{flex: 1}}>
-        <View style={{height: 50, width: '100%', justifyContent: 'center'}}>
+      <View style={styles.flex}>
+        <View style={styles.container}>
           <TouchableOpacity
             onPress={() => logout()}
-            style={{
-              alignSelf: 'flex-end',
-              padding: 20,
-            }}>
+            style={styles.button}>
             <Icon size={25} name="sign-out-alt" />
           </TouchableOpacity>
         </View>
@@ -59,7 +49,7 @@ class HomeScreen extends Component {
               onRefresh={this._handleLoadInfo}
             />
           }
-          style={{flex: 1}}>
+          style={styles.flex}>
           <InfoBox {...{title: 'User ID', value: currentUser.userId}} />
           <InfoBox {...{title: 'OS Name', value: currentUser?.info?.osName}} />
           <InfoBox
@@ -84,6 +74,21 @@ class HomeScreen extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    height: 50,
+    width: '100%',
+    justifyContent: 'center'
+  },
+  flex: {
+    flex: 1
+  },
+  button: {
+    alignSelf: 'flex-end',
+    padding: 20,
+  },
+});
 
 const mapStateToProps = (state) => ({
   currentUser: state.AuthReducer.currentUser,

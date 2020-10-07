@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import {View, Text, Image, StatusBar} from 'react-native';
-import {} from '@react-navigation/stack';
+import {View, StyleSheet, Image, StatusBar} from 'react-native';
 class SplashScreen extends Component {
   state = {};
   componentDidMount() {
@@ -13,34 +12,50 @@ class SplashScreen extends Component {
   }
   render() {
     return (
-      <View style={{flex: 1}}>
+      <View style={styles.container}>
         <StatusBar hidden />
         <Image
           resizeMode="stretch"
-          style={{width: '100%', height: 450}}
+          style={styles.header1}
           source={require('../assets/header.png')}
         />
-        <View style={{flex: 1}}>
+        <View style={styles.container}>
           <Image
             resizeMode="stretch"
-            style={{
-              width: 150,
-              height: 150,
-              alignSelf: 'center',
-              zIndex: 999,
-              transform: [{translateY: -70}],
-            }}
+            style={styles.logo}
             source={require('../assets/logo.png')}
           />
         </View>
         <Image
           resizeMode="stretch"
-          style={{width: '100%', height: 150, transform: [{rotateX: '180deg'}]}}
+          style={styles.header2}
           source={require('../assets/header.png')}
         />
       </View>
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1
+  },
+  header1: {
+    width: '100%',
+    height: 450
+  },
+  header2: {
+    width: '100%',
+    height: 150,
+    transform: [{rotateX: '180deg'}]
+  },
+  logo: {
+    width: 150,
+    height: 150,
+    alignSelf: 'center',
+    zIndex: 999,
+    transform: [{translateY: -70}],
+  },
+});
 
 export default SplashScreen;

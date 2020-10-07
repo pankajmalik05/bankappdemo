@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {
   View,
   Text,
-  Image,
+  StyleSheet,
   StatusBar,
   Dimensions,
   Animated,
@@ -31,6 +31,10 @@ class LoginScreen extends Component {
     this.bgTransformY = new Animated.Value(0);
     this.loginCTransformY = new Animated.Value(0);
     this.BG_Y_TRANSFORMED = 0;
+    this.width=0;
+    this.height=0;
+    this.upperContainerHeight = 0;
+    this.lowerContainerHeight=0;
     this.LOGIN_Y_TRANSFORMED = 0;
     this.ANIMATION_SPEED = 200;
     this.backHandler = null;
@@ -68,20 +72,13 @@ class LoginScreen extends Component {
   };
 
   _handleLogin = () => {
-    console.log('TEST 0 Login up');
     this.setState({processing: true});
     const {userId, password} = this.state;
-    console.log(`${userId} ${password}`);
     if (this.validated()) {
       this.toggleLoginViewTranformed();
-      console.log('TEST 1 Validated');
       login({userId, password})
         .then((user) => {
-          console.log('TEST 2 Logged In Up');
-
           this.setState({processing: false});
-
-          // this.props.navigation.navigate('LoginScreen');
         })
         .catch((err) => {
           this.setState({processing: false});
@@ -90,8 +87,6 @@ class LoginScreen extends Component {
         });
     } else {
       this.setState({processing: false});
-      console.log('Invalid data');
-      // this.toggleLoginViewTranformed();
     }
   };
 
@@ -107,8 +102,7 @@ class LoginScreen extends Component {
     }
   }
   enterLoginViewTransformed = () => {
-    // setTimeout(() => this.userIdRef.focus(), this.ANIMATION_SPEED);
-    Animated.parallel([
+     Animated.parallel([
       Animated.timing(this.bgTransformY, {
         toValue: this.BG_Y_TRANSFORMED,
         duration: this.ANIMATION_SPEED,
@@ -148,15 +142,16 @@ class LoginScreen extends Component {
   };
 
   render() {
-    const {width, height} = Dimensions.get('window');
+    this.width = Dimensions.get('window').width;
+    this.height = Dimensions.get('window').height;
     const {isLoginPageMode} = this.state;
-    const upperContainerHeight = height / 1.7;
-    const lowerContainerHeight = height - upperContainerHeight;
+    this.upperContainerHeight = height / 1.7;
+    this.lowerContainerHeight = height - upperContainerHeight;
     this.BG_Y_TRANSFORMED = -upperContainerHeight / 2.5;
     const deltaTransformLowerContainer = upperContainerHeight - 140;
     this.LOGIN_Y_TRANSFORMED = deltaTransformLowerContainer;
     return (
-      <View style={{width, height, backgroundColor: '#f0f0f0'}}>
+      <View style={styles.container}>
         <StatusBar translucent backgroundColor="transparent" />
         <CustomHeader
           backBtn={isLoginPageMode}
@@ -167,32 +162,18 @@ class LoginScreen extends Component {
             />
           )}
         />
-        <View style={{width, height: upperContainerHeight}}>
+        <View style={styles.upperContainer}>
           <Animated.Image
             resizeMode="stretch"
-            style={{
-              width,
-              height: height / 1.7,
-              transform: [{translateY: this.bgTransformY}],
-            }}
+            style={styles.animatedImage}
             source={require('../assets/authbg.png')}
           />
-          <Animated.Text style={{fontSize: 35, color: "white", position: "absolute",
-           left:20, top: 100, zIndex:99999, transform: [{translateY: this.bgTransformY}],}}>
+          <Animated.Text style={styles.animatedText}>
            RAKBANK</Animated.Text>
         </View>
-        <View style={{flex: 1, justifyContent: 'center'}}>
+        <View style={styles.animatedViewContainer}>
           <Animated.View
-            style={{
-              height: lowerContainerHeight,
-              justifyContent: 'center',
-              alignItems: 'center',
-              transform: [
-                {
-                  translateY: this.loginCTransformY,
-                },
-              ],
-            }}>
+            style={styles.animatedView}>
             {isLoginPageMode ? (
               <>
                 <MyInputText
@@ -205,7 +186,7 @@ class LoginScreen extends Component {
                   }}
                   title="User ID"
                 />
-                <View style={{height: 15}} />
+                <View style={styles.textContainer} />
                 <MyInputText
                   secure
                   focusedInput={this.state.focusedInput}
@@ -217,20 +198,19 @@ class LoginScreen extends Component {
                   }}
                   title="Password"
                 />
-                <View style={{height: 15}} />
+                <View style={styles.textContainer} />
                 <MyButton
                   loading={this.state.processing}
                   onPress={() => {
-                    // this.toggleLoginViewTranformed();
                     this._handleLogin();
                   }}
                   title="Submit"
                 />
-                <View style={{height: 15}} />
-                <Text style={{alignSelf: 'center', color: 'gray'}}>
+                <View style={styles.textContainer} />
+                <Text style={styles.text}>
                   Forget User ID | Forget Password
                 </Text>
-                <Text style={{alignSelf: 'center', color: 'gray'}}>
+                <Text style={styles.text}>
                   Enter User ID
                 </Text>
               </>
@@ -253,5 +233,53 @@ class LoginScreen extends Component {
     );
   }
 }
+
+const styles = StyleSheet.create({
+  container: {
+    width:this.width,
+    height:this.height,
+    backgroundColor: '#f0f0f0'
+  },
+  upperContainer: {
+    width:this.width,
+    height:this.upperContainerHeight,
+  },
+  animatedImage: {
+    width:this.width,
+    height: this.height / 1.7,
+    transform: [{translateY: this.bgTransformY}],
+  },
+  lowerContainer: {
+    width,
+    height,
+    backgroundColor: '#f0f0f0'
+  },
+  animatedText: {
+    fontSize: 35, 
+    color: "white",
+    position: "absolute",
+    left:20,
+    top: 100,
+    zIndex:99999,
+    transform: [{translateY: this.bgTransformY}]
+  },
+  text: {
+    alignSelf: 'center',
+    color: 'gray'
+  },
+  textContainer: {
+    height: 15
+  },
+  animatedView: {
+    height: this.lowerContainerHeight,
+    justifyContent: 'center',
+    alignItems: 'center',
+    transform: [{translateY: this.loginCTransformY}],
+  },
+  animatedViewContainer: {
+    flex: 1,
+    justifyContent: 'center'
+  },
+});
 
 export default LoginScreen;

@@ -1,5 +1,5 @@
 import React, {useEffect, useRef} from 'react';
-import {View, Text, TextInput, Dimensions} from 'react-native';
+import {View, StyleSheet, TextInput, Dimensions} from 'react-native';
 import {LIGHT_YELLOW} from '../themes/colors';
 
 const MyInputText = (props) => {
@@ -9,7 +9,6 @@ const MyInputText = (props) => {
   };
 
   useEffect(() => {
-    // console.log(`Focus changed ${props.focusedInput} Title: ${props.title}`);
     if (props.focusedInput === props.title) {
       focus();
     }
@@ -19,15 +18,7 @@ const MyInputText = (props) => {
 
   return (
     <View
-      style={{
-        height: 80,
-        width: width * 0.9,
-        borderRadius: 10,
-        alignSelf: 'center',
-        backgroundColor: 'white',
-        justifyContent: 'center',
-        alignItems: 'center',
-      }}>
+      style={styles.container}>
       <TextInput
         ref={ref}
         value={props.value}
@@ -37,15 +28,27 @@ const MyInputText = (props) => {
         }
         onSubmitEditing={() => props.focusNext()}
         secureTextEntry={props.secure ? true : false}
-        style={{
-          width: '95%',
-          borderBottomColor: props.validation ? LIGHT_YELLOW : 'red',
-          borderBottomWidth: 2,
-          fontSize: 18,
-          //   backgroundColor: 'red',
-        }}
+        style={styles.text}
       />
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    height: 80,
+    width: width * 0.9,
+    borderRadius: 10,
+    alignSelf: 'center',
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  text: {
+    width: '95%',
+    borderBottomColor: props.validation ? LIGHT_YELLOW : 'red',
+    borderBottomWidth: 2,
+    fontSize: 18,
+  },
+});
 export default MyInputText;

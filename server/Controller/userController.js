@@ -6,8 +6,6 @@ class UserController {
       return new Promise((resolve, reject) => {
         Users.findOne({ userId })
           .then((oUser) => {
-            console.log("Found User");
-            console.log(oUser);
             if (oUser) {
               resolve(oUser);
             } else {
@@ -15,7 +13,6 @@ class UserController {
             }
           })
           .catch((err) => {
-            console.log(err);
             reject({ error: { message: err.message } });
           });
       });
@@ -84,7 +81,6 @@ class UserController {
                   resolve(sUser);
                 })
                 .catch((err) => {
-                  console.log(err);
                   reject({ error: { message: err.message } });
                 });
             });

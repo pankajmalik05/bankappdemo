@@ -6,15 +6,12 @@ import {
   StatusBar,
   Dimensions,
   Animated,
-  BackHandler,
-  TouchableOpacity,
+  StyleSheet,
   Alert,
 } from 'react-native';
-import CustomFooter from '../components/customFooter';
 import CustomHeader from '../components/customHeader';
 import MyButton from '../components/myButton';
 import MyInputText from '../components/myInputText';
-import TranseButton from '../components/transButton';
 import {signup} from '../store/actions/authActions';
 
 class SignupScreen extends Component {
@@ -30,6 +27,9 @@ class SignupScreen extends Component {
     };
     this.bgTransformY = new Animated.Value(0);
     this.loginCTransformY = new Animated.Value(0);
+    this.width=0;
+    this.height=0;
+    this.lowerContainerHeight=0;
     this.BG_Y_TRANSFORMED = 0;
     this.LOGIN_Y_TRANSFORMED = 0;
     this.ANIMATION_SPEED = 200;
@@ -59,15 +59,11 @@ class SignupScreen extends Component {
   };
 
   _handleSignup = () => {
-    console.log('TEST 0 Signing up');
     this.setState({processing: true});
     const {userId, password} = this.state;
-    console.log(`${userId} ${password}`);
     if (this.validated()) {
-      console.log('TEST 1 Validated');
       signup({userId, password})
         .then((user) => {
-          console.log('TEST 2 Signed Up');
           this.setState({processing: false});
 
           this.props.navigation.navigate('LoginScreen');
@@ -78,20 +74,19 @@ class SignupScreen extends Component {
         });
     } else {
       this.setState({processing: false});
-      console.log('Invalid data');
     }
   };
 
   render() {
-    const {width, height} = Dimensions.get('window');
-    const {isLoginPageMode} = this.state;
+    this.width= Dimensions.get('window').width;
+    this.height = Dimensions.get('window').height;
     const upperContainerHeight = height / 1.7;
-    const lowerContainerHeight = height - upperContainerHeight;
+    this.lowerContainerHeight = height - upperContainerHeight;
     this.BG_Y_TRANSFORMED = -upperContainerHeight / 2.5;
     const deltaTransformLowerContainer = upperContainerHeight - 120;
     this.LOGIN_Y_TRANSFORMED = deltaTransformLowerContainer;
     return (
-      <View style={{flex: 1, backgroundColor: '#f0f0f0'}}>
+      <View style={styles.container}>
         <StatusBar translucent backgroundColor="transparent" />
         <CustomHeader
           backBtn
@@ -99,33 +94,19 @@ class SignupScreen extends Component {
           rightButton={(props) => false}
         />
         <Text
-          style={{
-            color: 'white',
-            position: 'absolute',
-            top: StatusBar.currentHeight * 1.5,
-            alignSelf: 'center',
-            zIndex: 9999,
-            fontSize: 25,
-          }}>
+          style={styles.signUpText}>
           Signup
         </Text>
-        <View style={{width, height: 200}}>
+        <View style={styles.imageContainer}>
           <Image
             resizeMode="stretch"
-            style={{
-              width,
-              height: 150,
-            }}
+            style={styles.image}
             source={require('../assets/header.png')}
           />
         </View>
-        <View style={{flex: 1, justifyContent: 'center'}}>
+        <View style={styles.textOuterContainer}>
           <View
-            style={{
-              height: lowerContainerHeight,
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}>
+            style={styles.textInnerContainer}>
             <MyInputText
               focusedInput={this.state.focusedInput}
               onChangeText={(text) => this.setState({userId: text})}
@@ -135,7 +116,7 @@ class SignupScreen extends Component {
               }}
               title="User ID"
             />
-            <View style={{height: 15}} />
+            <View style={styles.textContainer} />
             <MyInputText
               secure
               focusedInput={this.state.focusedInput}
@@ -146,25 +127,62 @@ class SignupScreen extends Component {
               }}
               title="Password"
             />
-            <View style={{height: 15}} />
+            <View style={styles.textContainer} />
             <MyButton
               loading={this.state.processing}
               onPress={() => this._handleSignup()}
               title="Sign Up"
             />
-            <View style={{height: 15}} />
-            <Text style={{alignSelf: 'center', color: 'gray'}}>
+            <View style={styles.textContainer} />
+            <Text style={styles.text}>
               Forget User ID | Forget Password
             </Text>
-            <Text style={{alignSelf: 'center', color: 'gray'}}>
+            <Text style={styles.text}>
               Enter User ID
             </Text>
           </View>
         </View>
-        {/* <CustomFooter /> */}
       </View>
     );
   }
 }
 
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f0f0f0'
+  },
+  signUpText: {
+    color: 'white',
+    position: 'absolute',
+    top: StatusBar.currentHeight * 1.5,
+    alignSelf: 'center',
+    zIndex: 9999,
+    fontSize: 25,
+  },
+  textContainer: {
+    height: 15
+  },
+  text: {
+    alignSelf: 'center',
+    color: 'gray'
+  },
+  imageContainer: {
+    width:this.width,
+    height: 200
+  },
+  image: {
+    width:this.width,
+    height: 150,
+  },
+  textOuterContainer: {
+    flex: 1,
+    justifyContent: 'center'
+  },
+  textInnerContainer: {
+    height: this.lowerContainerHeight,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 export default SignupScreen;
