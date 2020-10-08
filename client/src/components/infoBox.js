@@ -2,6 +2,16 @@ import React from 'react';
 import {View, Text,StyleSheet} from 'react-native';
 
 const InfoBox = ({title, value}) => {
+  const styles = StyleSheet.create({
+    container: {
+          height: '100%',
+          width: 65,
+          justifyContent: 'space-around',
+          alignItems: 'center',
+          paddingTop: 3,
+          elevation: 5,
+    },
+  });
   return (
     <View
       style={styles.container}>
@@ -15,14 +25,5 @@ const InfoBox = ({title, value}) => {
   );
 };
 
-const styles = StyleSheet.create({
-  container: {
-        height: '100%',
-        width: 65,
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        paddingTop: 3,
-        elevation: 5,
-  },
-});
+
 export default InfoBox;

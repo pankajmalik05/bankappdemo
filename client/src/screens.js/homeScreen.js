@@ -16,6 +16,21 @@ class HomeScreen extends Component {
     loading: false,
   };
 
+   styles = StyleSheet.create({
+    container: {
+      height: 50,
+      width: '100%',
+      justifyContent: 'center'
+    },
+    flex: {
+      flex: 1
+    },
+    button: {
+      alignSelf: 'flex-end',
+      padding: 20,
+    },
+  });
+
   componentDidMount() {
     this._handleLoadInfo();
   }
@@ -34,11 +49,11 @@ class HomeScreen extends Component {
   render() {
     const {currentUser} = this.props;
     return (
-      <View style={styles.flex}>
-        <View style={styles.container}>
+      <View style={this.styles.flex}>
+        <View style={this.styles.container}>
           <TouchableOpacity
             onPress={() => logout()}
-            style={styles.button}>
+            style={this.styles.button}>
             <Icon size={25} name="sign-out-alt" />
           </TouchableOpacity>
         </View>
@@ -49,7 +64,7 @@ class HomeScreen extends Component {
               onRefresh={this._handleLoadInfo}
             />
           }
-          style={styles.flex}>
+          style={this.styles.flex}>
           <InfoBox {...{title: 'User ID', value: currentUser.userId}} />
           <InfoBox {...{title: 'OS Name', value: currentUser?.info?.osName}} />
           <InfoBox
@@ -75,22 +90,9 @@ class HomeScreen extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    height: 50,
-    width: '100%',
-    justifyContent: 'center'
-  },
-  flex: {
-    flex: 1
-  },
-  button: {
-    alignSelf: 'flex-end',
-    padding: 20,
-  },
-});
 
 const mapStateToProps = (state) => ({
   currentUser: state.AuthReducer.currentUser,
 });
+
 export default connect(mapStateToProps, null)(HomeScreen);

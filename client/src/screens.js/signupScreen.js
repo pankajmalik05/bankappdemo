@@ -14,7 +14,7 @@ import MyButton from '../components/myButton';
 import MyInputText from '../components/myInputText';
 import {signup} from '../store/actions/authActions';
 
-class SignupScreen extends Component {
+ class SignupScreen extends Component {
   constructor() {
     super();
     this.state = {
@@ -27,16 +27,54 @@ class SignupScreen extends Component {
     };
     this.bgTransformY = new Animated.Value(0);
     this.loginCTransformY = new Animated.Value(0);
-    this.width=0;
-    this.height=0;
-    this.lowerContainerHeight=0;
     this.BG_Y_TRANSFORMED = 0;
+    this.width=0;
+    this.lowerContainerHeight=0;
     this.LOGIN_Y_TRANSFORMED = 0;
     this.ANIMATION_SPEED = 200;
     this.backHandler = null;
     this.userIdRef = null;
     this.passwordRef = null;
   }
+
+ styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f0f0f0'
+  },
+  signUpText: {
+    color: 'white',
+    position: 'absolute',
+    top: StatusBar.currentHeight * 1.5,
+    alignSelf: 'center',
+    zIndex: 9999,
+    fontSize: 25,
+  },
+  textContainer: {
+    height: 15
+  },
+  text: {
+    alignSelf: 'center',
+    color: 'gray'
+  },
+  imageContainer: {
+    width:this.width,
+    height: 200
+  },
+  image: {
+    width:this.width,
+    height: 150,
+  },
+  textOuterContainer: {
+    flex: 1,
+    justifyContent: 'center'
+  },
+  textInnerContainer: {
+    height: this.lowerContainerHeight,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
   validated = () => {
     let valid = true;
@@ -79,14 +117,14 @@ class SignupScreen extends Component {
 
   render() {
     this.width= Dimensions.get('window').width;
-    this.height = Dimensions.get('window').height;
-    const upperContainerHeight = height / 1.7;
-    this.lowerContainerHeight = height - upperContainerHeight;
+    this.height= Dimensions.get('window').height;
+    const upperContainerHeight = this.height / 1.7;
+    this.lowerContainerHeight = this.height - upperContainerHeight;
     this.BG_Y_TRANSFORMED = -upperContainerHeight / 2.5;
     const deltaTransformLowerContainer = upperContainerHeight - 120;
     this.LOGIN_Y_TRANSFORMED = deltaTransformLowerContainer;
     return (
-      <View style={styles.container}>
+      <View style={this.styles.container}>
         <StatusBar translucent backgroundColor="transparent" />
         <CustomHeader
           backBtn
@@ -94,19 +132,19 @@ class SignupScreen extends Component {
           rightButton={(props) => false}
         />
         <Text
-          style={styles.signUpText}>
+          style={this.styles.signUpText}>
           Signup
         </Text>
-        <View style={styles.imageContainer}>
+        <View style={this.styles.imageContainer}>
           <Image
             resizeMode="stretch"
-            style={styles.image}
+            style={this.styles.image}
             source={require('../assets/header.png')}
           />
         </View>
-        <View style={styles.textOuterContainer}>
+        <View style={this.styles.textOuterContainer}>
           <View
-            style={styles.textInnerContainer}>
+            style={this.styles.textInnerContainer}>
             <MyInputText
               focusedInput={this.state.focusedInput}
               onChangeText={(text) => this.setState({userId: text})}
@@ -116,7 +154,7 @@ class SignupScreen extends Component {
               }}
               title="User ID"
             />
-            <View style={styles.textContainer} />
+            <View style={this.styles.textContainer} />
             <MyInputText
               secure
               focusedInput={this.state.focusedInput}
@@ -127,17 +165,17 @@ class SignupScreen extends Component {
               }}
               title="Password"
             />
-            <View style={styles.textContainer} />
+            <View style={this.styles.textContainer} />
             <MyButton
               loading={this.state.processing}
               onPress={() => this._handleSignup()}
               title="Sign Up"
             />
-            <View style={styles.textContainer} />
-            <Text style={styles.text}>
+            <View style={this.styles.textContainer} />
+            <Text style={this.styles.text}>
               Forget User ID | Forget Password
             </Text>
-            <Text style={styles.text}>
+            <Text style={this.styles.text}>
               Enter User ID
             </Text>
           </View>
@@ -147,42 +185,5 @@ class SignupScreen extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#f0f0f0'
-  },
-  signUpText: {
-    color: 'white',
-    position: 'absolute',
-    top: StatusBar.currentHeight * 1.5,
-    alignSelf: 'center',
-    zIndex: 9999,
-    fontSize: 25,
-  },
-  textContainer: {
-    height: 15
-  },
-  text: {
-    alignSelf: 'center',
-    color: 'gray'
-  },
-  imageContainer: {
-    width:this.width,
-    height: 200
-  },
-  image: {
-    width:this.width,
-    height: 150,
-  },
-  textOuterContainer: {
-    flex: 1,
-    justifyContent: 'center'
-  },
-  textInnerContainer: {
-    height: this.lowerContainerHeight,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-});
-export default SignupScreen;
+
+export default SignupScreen
