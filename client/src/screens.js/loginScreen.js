@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {
   View,
   Text,
-  Image,
+  StyleSheet,
   StatusBar,
   Dimensions,
   Animated,
@@ -30,6 +30,7 @@ class LoginScreen extends Component {
     };
     this.bgTransformY = new Animated.Value(0);
     this.loginCTransformY = new Animated.Value(0);
+    this.lowerContainerHeight=0;
     this.BG_Y_TRANSFORMED = 0;
     this.LOGIN_Y_TRANSFORMED = 0;
     this.ANIMATION_SPEED = 200;
@@ -38,6 +39,21 @@ class LoginScreen extends Component {
     this.passwordRef = null;
   }
 
+  styles = StyleSheet.create({
+    animatedText: {
+      fontSize: 35,
+      color: "white",
+      position: "absolute",
+      left:20,
+      top: 100,
+      zIndex:99999
+    },
+    animatedView: {
+      height: this.lowerContainerHeight,
+      justifyContent: 'center',
+      alignItems: 'center'
+    },
+  });
   onBackButtonPressed = () => {
     if (this.state.isLoginPageMode) {
       this.toggleLoginViewTranformed();
@@ -68,20 +84,15 @@ class LoginScreen extends Component {
   };
 
   _handleLogin = () => {
-    console.log('TEST 0 Login up');
     this.setState({processing: true});
     const {userId, password} = this.state;
-    console.log(`${userId} ${password}`);
     if (this.validated()) {
       this.toggleLoginViewTranformed();
-      console.log('TEST 1 Validated');
       login({userId, password})
         .then((user) => {
-          console.log('TEST 2 Logged In Up');
 
           this.setState({processing: false});
 
-          // this.props.navigation.navigate('LoginScreen');
         })
         .catch((err) => {
           this.setState({processing: false});
@@ -90,8 +101,6 @@ class LoginScreen extends Component {
         });
     } else {
       this.setState({processing: false});
-      console.log('Invalid data');
-      // this.toggleLoginViewTranformed();
     }
   };
 
@@ -107,7 +116,6 @@ class LoginScreen extends Component {
     }
   }
   enterLoginViewTransformed = () => {
-    // setTimeout(() => this.userIdRef.focus(), this.ANIMATION_SPEED);
     Animated.parallel([
       Animated.timing(this.bgTransformY, {
         toValue: this.BG_Y_TRANSFORMED,
@@ -148,10 +156,10 @@ class LoginScreen extends Component {
   };
 
   render() {
-    const {width, height} = Dimensions.get('window');
+    const {width,height} = Dimensions.get('window');
     const {isLoginPageMode} = this.state;
     const upperContainerHeight = height / 1.7;
-    const lowerContainerHeight = height - upperContainerHeight;
+    this.lowerContainerHeight = height - upperContainerHeight;
     this.BG_Y_TRANSFORMED = -upperContainerHeight / 2.5;
     const deltaTransformLowerContainer = upperContainerHeight - 140;
     this.LOGIN_Y_TRANSFORMED = deltaTransformLowerContainer;
@@ -167,32 +175,22 @@ class LoginScreen extends Component {
             />
           )}
         />
-        <View style={{width, height: upperContainerHeight}}>
+        <View style={{width:width, height: upperContainerHeight}}>
           <Animated.Image
             resizeMode="stretch"
-            style={{
-              width,
-              height: height / 1.7,
-              transform: [{translateY: this.bgTransformY}],
-            }}
+            style={{width: width,
+             height: height / 1.7,
+              transform: [{translateY: this.bgTransformY}]}}
             source={require('../assets/authbg.png')}
           />
-          <Animated.Text style={{fontSize: 35, color: "white", position: "absolute",
-           left:20, top: 100, zIndex:99999, transform: [{translateY: this.bgTransformY}],}}>
+          <Animated.Text style={{...this.styles.animatedText,
+            transform: [{translateY: this.bgTransformY}]}}>
            RAKBANK</Animated.Text>
         </View>
         <View style={{flex: 1, justifyContent: 'center'}}>
           <Animated.View
-            style={{
-              height: lowerContainerHeight,
-              justifyContent: 'center',
-              alignItems: 'center',
-              transform: [
-                {
-                  translateY: this.loginCTransformY,
-                },
-              ],
-            }}>
+            style={{...this.styles.animatedView,
+              transform: [{translateY: this.loginCTransformY}]}}>
             {isLoginPageMode ? (
               <>
                 <MyInputText
@@ -221,7 +219,6 @@ class LoginScreen extends Component {
                 <MyButton
                   loading={this.state.processing}
                   onPress={() => {
-                    // this.toggleLoginViewTranformed();
                     this._handleLogin();
                   }}
                   title="Submit"

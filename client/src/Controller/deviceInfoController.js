@@ -18,7 +18,6 @@ class DeviceInfoController {
 
     this.handleDataLoaded = () => {
       if (this.loadcount === 5) {
-        console.log('DONE');
         if (this._onDataLoaded) {
           this._onDataLoaded(this.deviceInfo);
         }
@@ -31,16 +30,12 @@ class DeviceInfoController {
           PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
         )
           .then((isGranted) => {
-            console.log('TEST 01-LOCATION, Is Granted ');
-            console.log(isGranted);
             if (!isGranted) {
               PermissionsAndroid.requestMultiple([
                 PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
                 PermissionsAndroid.PERMISSIONS.ACCESS_COARSE_LOCATION,
               ])
                 .then((hasUserGranted) => {
-                  console.log('Had User Granted LocaTION');
-                  console.log(hasUserGranted);
                   if (
                     hasUserGranted[
                       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION
@@ -61,7 +56,6 @@ class DeviceInfoController {
           .catch((err) => {
             reject('No Permission LOCATION: Please restart app');
           });
-
       });
     };
 
@@ -246,6 +240,11 @@ class DeviceInfoController {
       });
     };
 
+    this.getWifiStatePermission = () => {
+      return new Promise((resolve, reject) => {
+        resolve(true);
+      });
+    };
 
     this.loadInfo = (onDataLoaded) => {
       this.loadcount = 0;
@@ -263,19 +262,14 @@ class DeviceInfoController {
 
       DeviceInfo.getIpAddress()
         .then((ipaddress) => {
-          console.log('PUBLIC IP');
-          console.log(ipaddress);
           this.deviceInfo.publicIP = ipaddress;
           this.loadcount++;
           this.handleDataLoaded();
         })
         .catch((error) => {
-          console.log('Catch, IP address');
-          console.log(error);
           this.loadcount++;
           this.handleDataLoaded();
         });
-
 
       this.getPermissionsAndTakeInfoIEMI_LOCATION();
 

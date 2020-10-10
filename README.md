@@ -1,12 +1,26 @@
-# bankappdemo
+### Bankappdemo
 
-# Running
+## Front End
+  # Modifications
+  - change Base_URL in src/proxy.js to hosted server url
+  # Running
   - yarn 
   - yarn android
-# Build Instructions for Android
+  # Build Instructions for Android
+  - open project diractory in terminal 
+  - type command "cd android"
+  - type  type "./gradlew assembleRelease"
+  - you will find your APK in   "projectRoot\android\app\build\outputs\apk\release\" directory 
 
-    1) open project diractory in terminal 
-    2) type command "cd android"
-    3) type "gradlew assembleRelease" if this command does'nt work then type "./gradlew assembleRelease"
-    4) you will find your APK in "projectRoot\android\app\build\outputs\apk\release\" diractory 
+## Back End
+  # Modifications
+  - change mongodbOnline in Config/db.js to  Database url
+  # Running
+  - node server
+  # Hosting on Heroku
+  - create account on heroku 
+  - create an app with name of your choice
+  - download the heroku cli for windows
+  - type command "heroku login" in terminal and follow steps to deploy and get server url for client
+
 

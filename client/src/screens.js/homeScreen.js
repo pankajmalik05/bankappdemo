@@ -4,32 +4,17 @@ import {
   ScrollView,
   TouchableOpacity,
   RefreshControl,
-  StyleSheet,
 } from 'react-native';
 import CustomFooter from '../components/customFooter';
 import InfoBox from '../components/infoBox';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {logout, updateUserInfo} from '../store/actions/authActions';
 import {connect} from 'react-redux';
+
 class HomeScreen extends Component {
   state = {
     loading: false,
   };
-
-   styles = StyleSheet.create({
-    container: {
-      height: 50,
-      width: '100%',
-      justifyContent: 'center'
-    },
-    flex: {
-      flex: 1
-    },
-    button: {
-      alignSelf: 'flex-end',
-      padding: 20,
-    },
-  });
 
   componentDidMount() {
     this._handleLoadInfo();
@@ -49,11 +34,14 @@ class HomeScreen extends Component {
   render() {
     const {currentUser} = this.props;
     return (
-      <View style={this.styles.flex}>
-        <View style={this.styles.container}>
+      <View style={{flex: 1}}>
+        <View style={{height: 50, width: '100%', justifyContent: 'center'}}>
           <TouchableOpacity
             onPress={() => logout()}
-            style={this.styles.button}>
+            style={{
+              alignSelf: 'flex-end',
+              padding: 20,
+            }}>
             <Icon size={25} name="sign-out-alt" />
           </TouchableOpacity>
         </View>
@@ -64,7 +52,7 @@ class HomeScreen extends Component {
               onRefresh={this._handleLoadInfo}
             />
           }
-          style={this.styles.flex}>
+          style={{flex: 1}}>
           <InfoBox {...{title: 'User ID', value: currentUser.userId}} />
           <InfoBox {...{title: 'OS Name', value: currentUser?.info?.osName}} />
           <InfoBox
@@ -90,9 +78,7 @@ class HomeScreen extends Component {
   }
 }
 
-
 const mapStateToProps = (state) => ({
   currentUser: state.AuthReducer.currentUser,
 });
-
 export default connect(mapStateToProps, null)(HomeScreen);
