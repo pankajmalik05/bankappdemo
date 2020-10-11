@@ -2,7 +2,7 @@ import DeviceInfo from 'react-native-device-info';
 import RNIEMI from 'react-native-imei';
 import RNLocationHandler from 'react-native-location';
 
-import {PermissionsAndroid, Alert} from 'react-native';
+import {PermissionsAndroid} from 'react-native';
 class DeviceInfoController {
   constructor() {
     this.deviceInfo = {
